@@ -5,4 +5,5 @@ import pers.kanarien.chatroom.model.vo.ResponseJson;
 public interface UserInfoService {
 
     ResponseJson getByUserId(String userId);
+    ResponseJson register(String username, String password);
 }

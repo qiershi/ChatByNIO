@@ -4,13 +4,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import pers.kanarien.chatroom.model.po.UserInfo;
 import pers.kanarien.chatroom.model.vo.ResponseJson;
 import pers.kanarien.chatroom.service.SecurityService;
+import pers.kanarien.chatroom.service.UserInfoService;
 
 @Controller
 public class SecurityController {
@@ -35,5 +34,17 @@ public class SecurityController {
     @ResponseBody
     public ResponseJson logout(HttpSession session) {
         return securityService.logout(session);
+    }
+
+    @Autowired
+    private UserInfoService registrationService;
+    @GetMapping("/registerForm")
+    public String toRegister(){
+        return "register";
+    }
+    @PostMapping("/register")
+    @ResponseBody
+    public ResponseJson register(@RequestBody UserInfo user) {
+        return registrationService.register(user.getUsername(), user.getPassword());
     }
 }

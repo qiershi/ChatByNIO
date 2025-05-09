@@ -233,18 +233,18 @@ function getSelectedFriends() {
 function sendAddFriendRequest(userId, note) {
     $.ajax({
         type: 'POST',
-        url: 'chatroom/add_friend',
+        url: 'api/friends/add',
         data: {
             userId: userId,
             note: note || '请求添加您为好友'
         },
         dataType: 'json',
         success: function(data) {
-            if (data.status == 200) {
+            if (data.success) {
                 alert('好友请求已发送');
                 document.getElementById('addFriendModal').style.display = 'none';
                 // 清空表单
-                document.getElementById('friendUsername').value = '';
+                document.getElementById('friendUserID').value = '';
                 document.getElementById('friendNote').value = '';
             } else {
                 alert(data.msg || '添加好友失败');
@@ -260,13 +260,14 @@ function sendAddFriendRequest(userId, note) {
 function sendCreateGroupRequest(groupName, memberIds) {
     $.ajax({
         type: 'POST',
-        url: 'chatroom/create_group',
+        url: 'group/create_group',
         data: {
             groupName: groupName,
             memberIds: memberIds.join(',')
         },
         dataType: 'json',
         success: function(data) {
+            console.log(data);
             if (data.status == 200) {
                 alert('群聊创建成功');
                 document.getElementById('createGroupModal').style.display = 'none';

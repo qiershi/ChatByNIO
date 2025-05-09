@@ -1,9 +1,7 @@
 package pers.kanarien.chatroom.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,7 +11,6 @@ import pers.kanarien.chatroom.dao.UserInfoDao;
 import pers.kanarien.chatroom.mapper.UserInfoMapper;
 import pers.kanarien.chatroom.model.po.GroupInfo;
 import pers.kanarien.chatroom.model.po.UserInfo;
-import pers.kanarien.chatroom.util.Constant;
 
 @Repository
 public class UserInfoDaoImpl implements UserInfoDao {
@@ -24,9 +21,6 @@ public class UserInfoDaoImpl implements UserInfoDao {
     @Autowired
     private GroupInfoDao groupInfoDao;
 
-    /**
-     * 这里使用死数据，不使用数据库
-     */
     @Override
     public void loadUserInfo() {
 
@@ -66,4 +60,17 @@ public class UserInfoDaoImpl implements UserInfoDao {
         userInfoMapper.addFriend(userId, friendId);
         userInfoMapper.addFriend(friendId, userId);
     }
+
+    @Override
+    public void register(UserInfo user) {
+        // 查询当前最大值
+        Integer maxId = userInfoMapper.getMaxUserId();
+        int newUserId = (maxId == null) ? 1 : maxId + 1; // 若表为空则从1开始
+        String username = user.getUsername();
+        String password = user.getPassword();
+        String avatarUrl = "static/img/avatar/Member00"+ ((int)(Math.random()*10)+1) + ".jpg";
+        userInfoMapper.register(String.valueOf(newUserId),username,password,avatarUrl);
+    }
+
+
 }

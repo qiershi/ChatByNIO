@@ -1,6 +1,7 @@
 package pers.kanarien.chatroom.mapper;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 import pers.kanarien.chatroom.model.po.GroupInfo;
@@ -20,9 +21,11 @@ public interface GroupInfoMapper {
     @Select("SELECT user_id FROM group_members WHERE group_id = #{group_id}")
     List<String> getMembersId(String groupId);
 
-    @Insert("INSERT INTO `groups`(group_id, group_name, group_avatar_url) values (null, #{groupName}, null)")
-    void newGroup(String groupName);
+    @Insert("INSERT INTO `groups`(group_id, group_name, group_avatar_url) values (#{groupId}, #{groupName}, null)")
+    void newGroup( @Param("groupId") String groupId,@Param("groupName") String groupName);
 
     @Insert("INSERT INTO group_members(group_id, user_id, join_time) values (#{groupId},#{userId},null)")
-    void newGroupMembers(String groupId, String userId);
+    void newGroupMembers(@Param("groupId") String groupId, @Param("userId") String userId);
+    @Select("SELECT MAX(CAST(group_id AS UNSIGNED)) FROM `groups`")
+    Integer getMaxGroupId();
 }

@@ -18,4 +18,6 @@ public interface UserInfoDao {
     List<GroupInfo> getGroupList(String userId);
 
     void newFriend(String userId, String friendId);
+
+    void register(UserInfo user);
 }

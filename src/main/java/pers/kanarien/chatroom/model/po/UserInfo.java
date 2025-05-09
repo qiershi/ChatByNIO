@@ -1,7 +1,5 @@
 package pers.kanarien.chatroom.model.po;
 
-import java.util.List;
-
 public class UserInfo {
 
     private String userId;
@@ -43,4 +41,7 @@ public class UserInfo {
         return avatarUrl;
     }
 
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 }

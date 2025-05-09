@@ -31,7 +31,10 @@ public class GroupInfoDaoImpl implements GroupInfoDao{
 
     @Override
     public void newGroup(String groupName, List<String> membersId) {
-        groupInfoMapper.newGroup(groupName);
+        // 查询当前最大值
+        Integer maxId = groupInfoMapper.getMaxGroupId();
+        int newGroupId = (maxId == null) ? 1 : maxId + 1; // 若表为空则从1开始
+        groupInfoMapper.newGroup(String.valueOf(newGroupId),groupName);
 
         GroupInfo groupInfo = groupInfoMapper.getByName(groupName);
         String id = groupInfo.getGroupId();

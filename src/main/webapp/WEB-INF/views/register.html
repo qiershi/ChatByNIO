@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<head>
+    <title>信啾</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords"
+        content="Transparent Sign In Form Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+        function hideURLbar(){ window.scrollTo(0,1); } 
+    </script>
+    <script src="../../static/js/common/jquery-1.9.1.min.js"></script>
+    <link rel="icon" href="../../static/img/chat.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../../static/css/common/font-awesome.css" /> <!-- Font-Awesome-Icons-CSS -->
+    <link rel="stylesheet" href="../../static/css/login.css" type="text/css" media="all" /> <!-- Style-CSS -->
+</head>
+
+<body class="background">
+<div class="header-and-main">
+    <div class="header-w3l">
+        <h1>信啾</h1>
+    </div>
+    <div class="main-content-agile">
+        <div class="sub-main-w3">
+            <h2>注册</h2>
+            <form onsubmit="return false;">
+
+                <div class="icon1">
+                    <input placeholder="用户名" id="username" type="text" onkeydown="handleEnter(event)"/>
+                </div>
+
+                <div class="icon2">
+                    <input placeholder="密码" id="password" type="password" onkeydown="handleEnter(event)"/>
+                </div>
+
+                <div class="icon2">
+                    <input placeholder="再次输入密码" id="repeatedPassword" type="password" onkeydown="handleEnter(event)"/>
+                </div>
+
+                <div class="clear"></div>
+                <input type="button" value="注册" onclick="register()" />
+
+                <a href="login.html" class="register-btn">返回登录</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function register() {
+        // 获取输入值
+        const username = $("#username").val().trim();
+        const password = $("#password").val();
+        const repeatedPassword = $("#repeatedPassword").val();
+
+        // 输入校验
+        if (!username) {
+            alert("用户名不能为空！");
+            return;
+        }
+        if (username.length < 3) {
+            alert("用户名至少需要3个字符！");
+            return;
+        }
+        if (!password) {
+            alert("密码不能为空！");
+            return;
+        }
+        if (password.length < 8) {
+            alert("密码至少需要8个字符！");
+            return;
+        }
+        if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+            alert("密码必须包含字母和数字！");
+            return;
+        }
+        if (password !== repeatedPassword) {
+            alert("两次输入的密码不一致！");
+            return;
+        }
+
+        // 发送注册请求
+        $.ajax({
+            url: "/register",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                username: username,
+                password: password
+            }),
+            success: function (response) {
+                if (response.code === 0) {
+                    alert("注册成功！");
+                    window.location.href = "login.html"; // 跳转到登录页
+                } else {
+                    alert(response.msg || "注册失败，请重试");
+                }
+            },
+            error: function (xhr) {
+                alert(`请求失败：${xhr.statusText}`);
+            }
+        });
+    }
+
+    function handleEnter(event) {
+        if (event.keyCode === 13) {
+            register();
+            event.preventDefault();
+        }
+    }
+
+</script>
+
+</html>

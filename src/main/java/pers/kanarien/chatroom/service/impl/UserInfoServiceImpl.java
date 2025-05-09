@@ -38,4 +38,19 @@ public class UserInfoServiceImpl implements UserInfoService {
         return success;
     }
 
+    @Override
+    public ResponseJson register(String username, String password) {
+        UserInfo existing = userInfoDao.getByUsername(username);
+        if (existing != null) {
+            return new ResponseJson().error("用户名已存在");
+        }
+
+        UserInfo user = new UserInfo();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        userInfoDao.register(user);
+        return new ResponseJson().success( "注册成功");
+    }
+
 }
