@@ -8,8 +8,6 @@ public class UserInfo {
     private String username;
     private String password;
     private String avatarUrl;
-    private List<UserInfo> friendList;
-    private List<GroupInfo> groupList;
     
     public UserInfo() {
         super();
@@ -44,26 +42,5 @@ public class UserInfo {
     public String getAvatarUrl() {
         return avatarUrl;
     }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    public List<UserInfo> getFriendList() {
-        return friendList;
-    }
-
-    public void setFriendList(List<UserInfo> friendList) {
-        this.friendList = friendList;
-    }
-
-    public List<GroupInfo> getGroupList() {
-        return groupList;
-    }
-
-    public void setGroupList(List<GroupInfo> groupList) {
-        this.groupList = groupList;
-    }
-
 
 }

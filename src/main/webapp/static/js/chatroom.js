@@ -7,13 +7,14 @@ function setUserInfo() {
         async: true,
         success: function (data) {
             console.log("获取用户信息...");
+            console.log(data);
             if (data.status == 200) {
                 var userInfo = data.data.userInfo;
                 userId = userInfo.userId;
                 $("#username").html(userInfo.username);
                 $("#avatarUrl").attr("src", userInfo.avatarUrl);
                 var groupListHTML = "";
-                var groupList = userInfo.groupList;
+                var groupList = data.data.groupList;
                 for (var i = 0; i < groupList.length; i++) {
                     groupListHTML +=
                         '<li>' +
@@ -28,7 +29,8 @@ function setUserInfo() {
                 $('.conLeft ul').append(groupListHTML);
 
                 var friendListHTML = "";
-                var friendList = userInfo.friendList;
+                var friendList = data.data.friendList;
+                console.log(friendList[0].userId);
                 for (var i = 0; i < friendList.length; i++) {
                     friendListHTML +=
                         '<li>' +
@@ -62,6 +64,7 @@ function startStatusPolling() {
     // 然后每30秒更新一次
     statusUpdateInterval = setInterval(fetchFriendStatus, 30000);
 }
+
 // 获取好友在线状态
 function fetchFriendStatus() {
     $.ajax({

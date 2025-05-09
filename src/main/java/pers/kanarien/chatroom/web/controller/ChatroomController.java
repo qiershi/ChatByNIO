@@ -5,10 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import pers.kanarien.chatroom.mapper.UserInfoMapper;
 import pers.kanarien.chatroom.model.po.UserInfo;
@@ -37,7 +34,7 @@ public class ChatroomController {
 
     /**
      * 描述：登录成功跳转页面后，调用此接口获取用户信息
-     * @param userId
+     * @param
      * @return
      */
     @RequestMapping(value = "/get_userinfo", method = RequestMethod.POST)
@@ -47,11 +44,12 @@ public class ChatroomController {
         return userInfoService.getByUserId((String)userId);
     }
 
-    @RequestMapping(value = "/userinfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_friend_status", method = RequestMethod.GET)
     @ResponseBody
     public ResponseJson userInfo(HttpSession session) {
-        UserInfo userInfo = userInfoMapper.getByUserId("1");
+        UserInfo userInfo = userInfoMapper.getById("1");
         return new ResponseJson().success()
                 .setData("userInfo", userInfo);
     }
+    
 }

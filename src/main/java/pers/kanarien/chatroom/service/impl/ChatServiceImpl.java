@@ -1,7 +1,9 @@
 package pers.kanarien.chatroom.service.impl;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.slf4j.Logger;
@@ -14,7 +16,9 @@ import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import pers.kanarien.chatroom.dao.GroupInfoDao;
+import pers.kanarien.chatroom.dao.impl.UserInfoDaoImpl;
 import pers.kanarien.chatroom.model.po.GroupInfo;
+import pers.kanarien.chatroom.model.po.UserInfo;
 import pers.kanarien.chatroom.model.vo.ResponseJson;
 import pers.kanarien.chatroom.service.ChatService;
 import pers.kanarien.chatroom.util.ChatType;
@@ -27,7 +31,9 @@ public class ChatServiceImpl implements ChatService{
             
     @Autowired
     private GroupInfoDao groupDao;
-    
+    @Autowired
+    private UserInfoDaoImpl userInfoDaoImpl;
+
     @Override
     public void register(JSONObject param, ChannelHandlerContext ctx) {
         String userId = (String)param.get("userId");
@@ -81,7 +87,7 @@ public class ChatServiceImpl implements ChatService{
                 sendMessage(userCtx.getValue(), responseJson);
             }
         }*/
-        GroupInfo groupInfo = groupDao.getByGroupId(toGroupId);
+        GroupInfo groupInfo = groupDao.getById(toGroupId);
         if (groupInfo == null) {
             String responseJson = new ResponseJson().error("该群id不存在").toString();
             sendMessage(ctx, responseJson);
@@ -92,7 +98,13 @@ public class ChatServiceImpl implements ChatService{
                     .setData("toGroupId", toGroupId)
                     .setData("type", ChatType.GROUP_SENDING)
                     .toString();
-            groupInfo.getMembers().stream()
+            List<String> membersId = groupDao.getMembersId(groupInfo.getGroupId());
+            List<UserInfo> members = new ArrayList<UserInfo>();
+            for (String memberId : membersId) {
+                members.add(userInfoDaoImpl.getByUserId(memberId));
+            }
+
+            members.stream()
                 .forEach(member -> { 
                     ChannelHandlerContext toCtx = Constant.onlineUserMap.get(member.getUserId());
                     if (toCtx != null && !member.getUserId().equals(fromUserId)) {
@@ -153,7 +165,7 @@ public class ChatServiceImpl implements ChatService{
         String originalFilename = (String)param.get("originalFilename");
         String fileSize = (String)param.get("fileSize");
         String fileUrl = (String)param.get("fileUrl");
-        GroupInfo groupInfo = groupDao.getByGroupId(toGroupId);
+        GroupInfo groupInfo = groupDao.getById(toGroupId);
         if (groupInfo == null) {
             String responseJson = new ResponseJson().error("该群id不存在").toString();
             sendMessage(ctx, responseJson);
@@ -166,7 +178,13 @@ public class ChatServiceImpl implements ChatService{
                     .setData("fileUrl", fileUrl)
                     .setData("type", ChatType.FILE_MSG_GROUP_SENDING)
                     .toString();
-            groupInfo.getMembers().stream()
+            List<String> membersId = groupDao.getMembersId(groupInfo.getGroupId());
+            List<UserInfo> members = new ArrayList<UserInfo>();
+            for (String memberId : membersId) {
+                members.add(userInfoDaoImpl.getByUserId(memberId));
+            }
+
+            members.stream()
                 .forEach(member -> { 
                     ChannelHandlerContext toCtx = Constant.onlineUserMap.get(member.getUserId());
                     if (toCtx != null && !member.getUserId().equals(fromUserId)) {

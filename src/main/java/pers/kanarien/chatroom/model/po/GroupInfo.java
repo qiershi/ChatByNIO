@@ -1,20 +1,16 @@
 package pers.kanarien.chatroom.model.po;
 
-import java.util.List;
-
 public class GroupInfo {
 
     private String groupId;
     private String groupName;
     private String groupAvatarUrl;
-    private List<UserInfo> members;
     
-    public GroupInfo(String groupId, String groupName, String groupAvatarUrl, List<UserInfo> members) {
+    public GroupInfo(String groupId, String groupName, String groupAvatarUrl) {
         super();
         this.groupId = groupId;
         this.groupName = groupName;
         this.groupAvatarUrl = groupAvatarUrl;
-        this.members = members;
     }
 
     public String getGroupId() {
@@ -22,12 +18,6 @@ public class GroupInfo {
     }
     public void setGroupId(String groupId) {
         this.groupId = groupId;
-    }
-    public List<UserInfo> getMembers() {
-        return members;
-    }
-    public void setMembers(List<UserInfo> members) {
-        this.members = members;
     }
 
     public String getGroupName() {
